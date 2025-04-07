@@ -22,7 +22,7 @@ public class GrpcClient {
 
         HelloResponse response = stub.hello(request);
 
-        System.out.println("Ответ сервера: " + response.getGreeting());
+        System.out.println("Server response: " + response.getGreeting());
 
         channel.shutdown();
     }

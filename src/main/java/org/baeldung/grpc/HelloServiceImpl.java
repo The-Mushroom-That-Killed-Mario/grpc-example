@@ -4,7 +4,7 @@ import io.grpc.stub.StreamObserver;
 
 public class HelloServiceImpl extends HelloServiceGrpc.HelloServiceImplBase {
 
-    //no streaming (Blocking stub)
+    // no streaming (Blocking stub)
     @Override
     public void hello(HelloRequest request, StreamObserver<HelloResponse> responseObserver) {
         String greeting = "Hello, " + request.getFirstName() + " " + request.getLastName();
@@ -13,7 +13,7 @@ public class HelloServiceImpl extends HelloServiceGrpc.HelloServiceImplBase {
         responseObserver.onCompleted();
     }
 
-    //Server streaming
+    // Server streaming
     @Override
     public void streamHello(HelloRequest request, StreamObserver<HelloResponse> responseObserver) {
         for (int i = 1; i <= 5; i++) {
@@ -33,7 +33,7 @@ public class HelloServiceImpl extends HelloServiceGrpc.HelloServiceImplBase {
         responseObserver.onCompleted();
     }
 
-    //Client streaming
+    // Client streaming
     @Override
     public StreamObserver<HelloRequest> clientStreamHello(StreamObserver<HelloResponse> responseObserver) {
         return new StreamObserver<HelloRequest>() {
@@ -43,7 +43,7 @@ public class HelloServiceImpl extends HelloServiceGrpc.HelloServiceImplBase {
             @Override
             public void onNext(HelloRequest request) {
 
-                System.out.println("Клиент прислал request:");
+                System.out.println("Client sent request:");
                 System.out.println(request);
 
                 allNames.append(request.getFirstName())
@@ -59,7 +59,7 @@ public class HelloServiceImpl extends HelloServiceGrpc.HelloServiceImplBase {
 
             @Override
             public void onCompleted() {
-                String result = "Привет всем: " + allNames.toString();
+                String result = "Hello to everyone: " + allNames;
                 HelloResponse response = HelloResponse.newBuilder()
                         .setGreeting(result)
                         .build();
@@ -69,14 +69,14 @@ public class HelloServiceImpl extends HelloServiceGrpc.HelloServiceImplBase {
         };
     }
 
-    //Bidirectional streaming
+    // Bidirectional streaming
     @Override
     public StreamObserver<HelloRequest> chatHello(StreamObserver<HelloResponse> responseObserver) {
         return new StreamObserver<HelloRequest>() {
 
             @Override
             public void onNext(HelloRequest request) {
-                String reply = "👋 Привет, " + request.getFirstName() + " " + request.getLastName();
+                String reply = "👋 Hello, " + request.getFirstName() + " " + request.getLastName();
                 HelloResponse response = HelloResponse.newBuilder()
                         .setGreeting(reply)
                         .build();
@@ -86,12 +86,12 @@ public class HelloServiceImpl extends HelloServiceGrpc.HelloServiceImplBase {
 
             @Override
             public void onError(Throwable t) {
-                System.err.println("Ошибка на сервере в chatHello: " + t.getMessage());
+                System.err.println("Server error in chatHello: " + t.getMessage());
             }
 
             @Override
             public void onCompleted() {
-                System.out.println("Сервер завершает чат.");
+                System.out.println("Server is closing the chat.");
                 responseObserver.onCompleted();
             }
         };

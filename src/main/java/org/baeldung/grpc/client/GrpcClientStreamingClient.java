@@ -24,7 +24,7 @@ public class GrpcClientStreamingClient {
         StreamObserver<HelloResponse> responseObserver = new StreamObserver<HelloResponse>() {
             @Override
             public void onNext(HelloResponse response) {
-                System.out.println("Ответ от сервера: " + response.getGreeting());
+                System.out.println("Server response: " + response.getGreeting());
             }
 
             @Override
@@ -35,19 +35,19 @@ public class GrpcClientStreamingClient {
 
             @Override
             public void onCompleted() {
-                System.out.println("Сервер завершил соединение.");
+                System.out.println("Server has closed the connection.");
                 finishLatch.countDown();
             }
         };
 
         StreamObserver<HelloRequest> requestObserver = stub.clientStreamHello(responseObserver);
 
-        // Отправляем несколько запросов
+        // Sending multiple requests
         requestObserver.onNext(HelloRequest.newBuilder().setFirstName("Anna").setLastName("Ivanova").build());
         requestObserver.onNext(HelloRequest.newBuilder().setFirstName("Ivan").setLastName("Petrov").build());
         requestObserver.onNext(HelloRequest.newBuilder().setFirstName("John").setLastName("Doe").build());
 
-        requestObserver.onCompleted(); // Завершаем поток запросов
+        requestObserver.onCompleted(); // Completing the request stream
 
         finishLatch.await(5, TimeUnit.SECONDS);
         channel.shutdown();

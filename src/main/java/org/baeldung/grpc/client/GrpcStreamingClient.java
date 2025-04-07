@@ -29,18 +29,18 @@ public class GrpcStreamingClient {
         stub.streamHello(request, new StreamObserver<HelloResponse>() {
             @Override
             public void onNext(HelloResponse response) {
-                System.out.println("Получено сообщение: " + response.getGreeting());
+                System.out.println("Received message: " + response.getGreeting());
             }
 
             @Override
             public void onError(Throwable t) {
-                System.err.println("Ошибка: " + t.getMessage());
+                System.err.println("Error: " + t.getMessage());
                 latch.countDown();
             }
 
             @Override
             public void onCompleted() {
-                System.out.println("Стрим завершён.");
+                System.out.println("Stream completed.");
                 latch.countDown();
             }
         });
