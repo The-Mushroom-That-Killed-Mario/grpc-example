@@ -1,7 +1,10 @@
-package org.baeldung.grpc;
+package org.baeldung.grpc.client;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import org.baeldung.grpc.HelloRequest;
+import org.baeldung.grpc.HelloResponse;
+import org.baeldung.grpc.HelloServiceGrpc;
 
 public class GrpcClient {
     public static void main(String[] args) {

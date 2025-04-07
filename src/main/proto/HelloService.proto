@@ -1,5 +1,4 @@
 syntax = "proto3";
-
 option java_multiple_files = true;
 package org.baeldung.grpc;
 
@@ -13,5 +12,6 @@ message HelloResponse {
 }
 
 service HelloService {
-  rpc hello (HelloRequest) returns (HelloResponse);
+  rpc hello (HelloRequest) returns (HelloResponse); // Unary
+  rpc streamHello (HelloRequest) returns (stream HelloResponse); // 🔁 Server streaming
 }
