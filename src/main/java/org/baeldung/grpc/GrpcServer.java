@@ -10,7 +10,7 @@ public class GrpcServer {
                 .addService(new HelloServiceImpl())
                 .build();
 
-        System.out.println("gRPC сервер запущен на порту 8085");
+        System.out.println("gRPC run to port 8085");
         server.start();
         server.awaitTermination();
     }

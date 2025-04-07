@@ -38,7 +38,7 @@ public class HelloServiceImpl extends HelloServiceGrpc.HelloServiceImplBase {
     public StreamObserver<HelloRequest> clientStreamHello(StreamObserver<HelloResponse> responseObserver) {
         return new StreamObserver<HelloRequest>() {
 
-            StringBuilder allNames = new StringBuilder();
+            final StringBuilder allNames = new StringBuilder();
 
             @Override
             public void onNext(HelloRequest request) {
@@ -64,6 +64,34 @@ public class HelloServiceImpl extends HelloServiceGrpc.HelloServiceImplBase {
                         .setGreeting(result)
                         .build();
                 responseObserver.onNext(response);
+                responseObserver.onCompleted();
+            }
+        };
+    }
+
+    //Bidirectional streaming
+    @Override
+    public StreamObserver<HelloRequest> chatHello(StreamObserver<HelloResponse> responseObserver) {
+        return new StreamObserver<HelloRequest>() {
+
+            @Override
+            public void onNext(HelloRequest request) {
+                String reply = "👋 Привет, " + request.getFirstName() + " " + request.getLastName();
+                HelloResponse response = HelloResponse.newBuilder()
+                        .setGreeting(reply)
+                        .build();
+
+                responseObserver.onNext(response); // Отвечаем сразу
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                System.err.println("Ошибка на сервере в chatHello: " + t.getMessage());
+            }
+
+            @Override
+            public void onCompleted() {
+                System.out.println("Сервер завершает чат.");
                 responseObserver.onCompleted();
             }
         };
