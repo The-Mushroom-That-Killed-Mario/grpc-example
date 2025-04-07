@@ -14,4 +14,5 @@ message HelloResponse {
 service HelloService {
   rpc hello (HelloRequest) returns (HelloResponse); // Unary
   rpc streamHello (HelloRequest) returns (stream HelloResponse); // 🔁 Server streaming
+  rpc clientStreamHello (stream HelloRequest) returns (HelloResponse); // 🔼 Client streaming
 }
